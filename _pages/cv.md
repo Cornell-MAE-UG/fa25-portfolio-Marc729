@@ -1,14 +1,14 @@
 ---
 layout: default
-title: <Your Name> - Curriculum Vitae
+title: Marcello Lombardo - Curriculum Vitae
 permalink: /cv/
 ---
 ## Curriculum Vitae
 
-[Download my CV]({{ "/assets/CV.pdf" | relative_url }}) in PDF format.
+[Download my CV]({{ "/assets/resume.pdf" | relative_url }}) in PDF format.
 
 
-**Email:** [netID@cornell.edu](mailto:netID@cornell.edu) | | | **Phone:** +123 456 7890
+<!-- **Email:** [ml2749@cornell.edu](mailto:netID@cornell.edu) | | | **Phone:** (516)
 
 ---
 
@@ -71,4 +71,4 @@ Aspiring engineering student with a strong foundation in.... Passionate about ..
 #### References
 Available upon request.
 
----
+--- -->
