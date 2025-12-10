@@ -8,3 +8,123 @@ $color_scheme: '{{ site.color_scheme }}';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Merriweather:wght@400;700&display=swap');
 @import "custom";
 
+table.material-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.material-table th,
+table.material-table td {
+  border: 2px solid white;   /* White borders */
+  padding: 8px;
+}
+
+table.material-table th {
+  font-size: 0.85rem;        /* Smaller header font size */
+  background-color: #797272; /* Optional: light header background */
+}
+
+table.material-table th,
+table.material-table td {
+  text-align: center;   /* Center text in all cells */
+}
+
+.section-divider {
+  border: 0;
+  height: 2px;
+  background: #ccc;   /* light grey */
+  margin-top: 10px;
+  margin-bottom: 15px; 
+}
+
+h1, h2, h3 {
+  margin-top: 75px;   /* increase this number for more space */
+}
+
+.torque-image {
+  display: block;
+  margin: 0 auto 30px;
+  max-width: 800px;
+  width: 100%;
+  height: auto;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center;   /* centers the images */
+  gap: 50px;                 /* space between images */
+  flex-wrap: wrap;           /* allows stacking on small screens */
+  margin-bottom: 30px;
+}
+
+.image-row img {
+  max-width: 800px;          /* adjust size here */
+  width: 100%;
+  height: auto;
+  border-radius: 8px;        /* optional */
+}
+
+.project-title {
+  color: red;
+  text-decoration: underline;
+}
+
+.project-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.gallery-item {
+  width: 200px;           /* adjust card width */
+  height: auto;           /* allow height to grow */
+  overflow: visible;      /* DO NOT clip long text */
+  text-align: center;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gallery-item p {
+  margin-top: 10px;
+  font-size: 1rem;
+  white-space: normal;    /* allow wrapping */
+  overflow: visible;      /* let text expand */
+  text-overflow: unset;   /* no ellipsis */
+}
+
+.code-scroll {
+  background: #000 !important;
+  border: 5px solid #444;
+  border-radius: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 0; /* let pre control padding */
+  margin-bottom: 25px;
+}
+
+/* Rouge wrapper */
+.highlight {
+  background: #000 !important;
+  border-radius: 6px;
+}
+
+/* the <pre> inside */
+.highlight pre {
+  background: transparent !important;
+  border: none !important;
+  margin: 0;
+  padding: 12px;
+}
+
+/* the <code> inside */
+.highlight code {
+  background: transparent !important;
+  color: #eee !important;
+}
+
