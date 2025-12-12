@@ -109,7 +109,185 @@ The simulation results show a substantial reduction in peak body travel, suspens
 
 Overall, across all three test cases, the LQR model performed better than the passive model. It consistently showed a large improvement in reducing body acceleration and suspension displacement, while the improvement in body travel was smaller. The body displacement could be reduced further by adjusting the Q matrix; however, doing so would increase suspension deflection and body acceleration, which are more critical for ride comfort and physical limits such as shock travel. The results could also be improved by increasing the value of the R matrix, though this would lead to higher actuator forces. Additionally, simulating with different amplitudes or frequencies for the road would lead to different results, but these results were determined to be a worst case scenario due to the road oscillating at the system's natural frequency.
 
+# MATLAB Code  
+<hr class="section-divider">
+**MATLAB Script:** 
+
+```matlab
+clear; clc; close all;
+
+%% Parameters 
+mb = 250; mw = 30;
+ks = 20000; bs = 1500;
+kt = 150000;
+
+%% State-space model
+
+% x = [xb xb. xw xw.] | u = [r f] | y = [xb ds ab] 
+
+% A Matric 
+A = [    0       1          0           0 
+      -ks/mb  -bs/mb      ks/mb       bs/mb 
+         0        0         0           1 
+       ks/mw   bs/mw   (-ks-kt)/mw   -bs/mw ];
+
+% B Matrix 
+B = [ 0         0 
+      0        1/mb 
+      0         0 
+      kt/mw   -1/mw ];
+
+%  C Matrix 
+C =  [    1        0       0       0
+          1        0      -1       0 
+       -ks/mb   -bs/mb   ks/mb   bs/mb ];
+
+% D Matrix 
+D = [ 0    0 
+      0    0 
+      0   1/mb ];
+
+% Create State Space 
+sys_sus = ss(A,B,C,D); 
+
+sys_sus.InputName = {'r', 'F'}; 
+sys_sus.OutputName = {'xb', 'ds', 'ab'}; 
+sys_sus.StateName = {'Body Travel (m)', 'Body Velocity (m/s)', ...  
+                   'Wheel travel (m)', 'Wheel Velovity (m/s)'}; 
+
+sys_tf = tf(sys_sus); 
+sys_zpk = zpk(sys_sus); 
+
+%% Plot Bodeplot from road input
+figure 
+color = ['r', 'b', 'g']; 
+for i = 1:size(sys_sus, 1)
+   bodemag(sys_sus(i,1), color(i)); 
+   hold on 
+end 
+
+legend(sys_sus.OutputName)
+title('System Reponse from r')
+
+for i = 1:size(sys_sus, 1) 
+    poles = sys_zpk.P{i,1}; 
+    wn = unique(abs(poles)); 
+    resp = abs(freqresp(sys_sus(i,1), wn)); 
+    [peakMag, inx] = max(resp);
+    peakFreq = wn(inx); 
+
+    semilogx(peakFreq, mag2db(peakMag), '*', LineWidth=2, HandleVisibility='off', Color=color(i)); 
+    hold on 
+    semilogx([peakFreq, peakFreq], [-200, mag2db(peakMag)], ':', LineWidth=2, HandleVisibility='off', Color=color(i))
+    hold on 
+end 
+
+%% Split disturbance input and control input
+Bd = B(:,1);   % road disturbance input
+Bc = B(:,2);   % control input (active force F)
+Dd = D(:,1);   % direct feedthrough from r
+Dc = D(:,2);   % direct feedthrough from F
 
 
+%% LQR design (output weighting)
+Wy = diag([1e6, 1e2, 1e6]);    % weights on [xb; ds; ab]
+Q  = C' * Wy * C;              % project into state space
+R  = 0.5;
 
+[K, S, e] = lqr(A, Bc, Q, R); 
 
+%% Closed-loop system from road r -> outputs [xb; ds; ab]
+Acl = A - Bc*K;   % closed-loop A matrix
+
+Bcl = Bd;         % only road input in this model
+Ccl = C;
+Dcl = Dd;
+
+sys_cl = ss(Acl, Bcl, Ccl, Dcl);   % <--- THIS defines sys_cl
+sys_cl.InputName  = {'r'};
+sys_cl.OutputName = {'xb', 'ds', 'ab'};
+
+%% Passive system (no control, F = 0)
+sys_passive = ss(A, Bd, C, Dd);
+sys_passive.InputName  = {'r'};
+sys_passive.OutputName = {'xb', 'ds', 'ab'};
+
+%% Road input:
+t = 0:0.001:5;
+r = 0.1*ones(size(t)); 
+
+[y_pass, t_pass] = lsim(sys_passive, r, t);   % passive response
+[y_act,  t_act ] = lsim(sys_cl,      r, t);   % active LQR response
+
+%% Plot outputs
+figure;
+subplot(3,1,1)
+plot(t_pass, y_pass(:,1), 'LineWidth', 1.5); hold on;
+plot(t_act,  y_act(:,1),  '--', 'LineWidth', 1.5);
+grid on;
+ylabel('x_b (m)');
+legend('Passive','LQR Active');
+title('Body Travel');
+
+subplot(3,1,2)
+plot(t_pass, y_pass(:,2), 'LineWidth', 1.5); hold on;
+plot(t_act,  y_act(:,2),  '--', 'LineWidth', 1.5);
+grid on;
+ylabel('d_s (m)');
+legend('Passive','LQR Active');
+title('Suspension Deflection');
+
+subplot(3,1,3)
+plot(t_pass, y_pass(:,3), 'LineWidth', 1.5); hold on;
+plot(t_act,  y_act(:,3),  '--', 'LineWidth', 1.5);
+grid on;
+ylabel('a_b (m/s^2)');
+xlabel('Time (s)');
+legend('Passive','LQR Active');
+title('Body Acceleration');
+
+%% Plot control force
+% Get state response for closed-loop
+x_act = lsim(ss(Acl, Bcl, eye(4), zeros(4,1)), r, t);
+F_act = - (K * x_act.').';   % F = -Kx
+
+figure;
+plot(t, F_act, 'LineWidth', 1.5);
+grid on;
+xlabel('Time (s)');
+ylabel('F (N)');
+title('Active Suspension Force (LQR)');
+
+%% Steady-state amplitude ratios (LQR / Passive) for sinusoidal input
+
+% sinusoid used above: r = 0.1*sin(8*t);
+omega = wn(1);                  % rad/s
+T = 2*pi/omega;             % period of the sinusoid
+nCycles = 5;                % how many final cycles to use for steady state
+
+t_ss_start = t(end) - nCycles*T;   % start time for steady-state window
+idx_ss = t >= t_ss_start;          % logical indices for steady state
+
+% steady-state portions of the outputs
+y_pass_ss = y_pass(idx_ss, :);     % passive outputs in steady state
+y_act_ss  = y_act(idx_ss,  :);     % LQR outputs in steady state
+
+% estimate amplitude as half of peak-to-peak for each output
+A_pass = (max(y_pass_ss) - min(y_pass_ss))/2;   % 1x3: [xb, ds, ab]
+A_act  = (max(y_act_ss)  - min(y_act_ss))/2;    % 1x3
+
+% amplitude ratios: LQR / Passive
+amp_ratio = A_act ./ A_pass;   % 1x3
+
+disp('Steady-state amplitude ratios (LQR / Passive) for [xb, ds, ab]:');
+disp(amp_ratio);
+
+% bar plot of the ratios
+figure;
+bar(amp_ratio);
+set(gca, 'XTickLabel', {'x_b','d_s','a_b'});
+ylabel('Amplitude ratio (LQR / Passive)');
+title('Steady-state amplitude ratios for sinusoidal road input');
+grid on;
+```
+{: .code-scroll}
