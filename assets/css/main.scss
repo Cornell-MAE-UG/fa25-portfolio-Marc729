@@ -76,25 +76,31 @@ h1, h2, h3 {
   justify-content: center;
 }
 
+/* The container for each project card */
 .gallery-item {
-  width: 200px;           /* adjust card width */
-  height: auto;           /* allow height to grow */
-  overflow: visible;      /* DO NOT clip long text */
+  width: 200px;         /* controls thumbnail width */
   text-align: center;
+  overflow: visible;    
+  height: auto;         /* allow card height to expand */
 }
 
+/* Uniform image size */
 .gallery-item img {
-  width: 100%;
-  height: auto;
+  width: 100%;          /* fill the card width */
+  height: 150px;        /* <<< force SAME HEIGHT for all images */
+  object-fit: contain;    /* <<< crop to fit uniformly */
+  border-radius: 6px;   /* optional */
   display: block;
+  margin: 0 auto;
 }
 
+/* Title styling */
 .gallery-item p {
   margin-top: 10px;
   font-size: 1rem;
-  white-space: normal;    /* allow wrapping */
-  overflow: visible;      /* let text expand */
-  text-overflow: unset;   /* no ellipsis */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .code-scroll {
@@ -127,4 +133,14 @@ h1, h2, h3 {
   background: transparent !important;
   color: #eee !important;
 }
+
+.mini-break {
+  width: 60px;            /* length of the line */
+  height: 3px;            /* thickness */
+  background-color: #ffffff; /* line color */
+  margin: 30px auto;      /* centers it */
+  border-radius: 2px;     /* optional: smooth edges */
+}
+
+
 
