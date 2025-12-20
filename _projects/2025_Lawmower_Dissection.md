@@ -1,6 +1,6 @@
 ---
 layout: project
-title: Lawn Mower Disection
+title: Lawn Mower Dissection
 description: Fluids Project
 technologies: [Fluid Mechanics Principles] 
 image: /assets/images/lawm_mower.jpeg
