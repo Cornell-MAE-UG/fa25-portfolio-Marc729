@@ -4,7 +4,7 @@
 # which you are expected to set up once and rarely need to edit after that.
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # `jekyll serve`. If you change this file, please restart the server process.
-# 
+# fa25-portfolio-Marc729
 
 
 # Site Settings
@@ -14,8 +14,8 @@ title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : Marcello Lombardo
 description              : Marcello Lombardo - Projects and CV 
-baseurl                  : "fa25-portfolio-Marc729" # Set this to your repo name 
-
+baseurl                  : "fa25-portfolio-Marc729"  # Set this to your repo name 
+   
 # Theme and Style
 theme: jekyll-theme-minimal
 color_scheme: dark # light/default, dark, or aqua
