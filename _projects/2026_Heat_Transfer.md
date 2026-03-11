@@ -12,6 +12,12 @@ show_header_image: false
 The homework assignment from MAE 3240 that I found the most valuable was probelm set 3. 
 
 # Problem Set 3 
+<p>
+  <a href="{{ '/assets/Problem_set_3.pdf' | relative_url }}" target="_blank">
+    View Full PDF Report
+  </a>
+</p>
+
 <hr class="section-divider">
 <iframe src="{{ '/assets/Problem_set_3.pdf' | relative_url }}" 
         width="100%" 
@@ -19,6 +25,11 @@ The homework assignment from MAE 3240 that I found the most valuable was probelm
 </iframe>
 
 # Problem Set 3 Work 
+<p>
+  <a href="{{ '/assets/Heat_work.pdf' | relative_url }}" target="_blank">
+    View Full PDF Report
+  </a>
+</p>
 <hr class="section-divider">
 <iframe src="{{ '/assets/Heat_work.pdf' | relative_url }}" 
         width="100%" 
