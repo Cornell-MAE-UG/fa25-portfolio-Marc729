@@ -20,7 +20,7 @@ The homework assignment from MAE 3240 that I found the most valuable was probelm
 
 # Problem Set 3 Work 
 <hr class="section-divider">
-<iframe src=src="{{ 'Heat_transfer_3_final.pdf' | relative_url }}" 
+<iframe src="{{ 'Heat_transfer_3_final.pdf' | relative_url }}" 
         width="100%" 
         height="800px">
 </iframe>
