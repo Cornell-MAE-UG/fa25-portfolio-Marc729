@@ -3,7 +3,7 @@ layout: project
 title: Mechatronics Robot Compeition 
 description: Mechatronics Project 
 technologies: [SOLIDWORKS, 3D-Printing, Laser Cutting, Circuits] 
-image: /assets/images/Mechatronics_1.JPEG
+image: /assets/images/Mech_1.JPEG
 show_header_image: false 
 ---
 
@@ -93,3 +93,8 @@ The bill of materials for the final design is shown below:
         width="100%" 
         height="800px">
 </iframe>
+
+
+
+
+
